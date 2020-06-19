@@ -12,24 +12,25 @@ class Main {
     private static def TITLE = "Reviews note,Title,Number,Created at,Reporter"
 
     private static def REPOS = [
-            "agrosner/DBFlow",
-            "openid/AppAuth-Android",
-            "swagger-api/swagger-codegen",
-            "JodaOrg/joda-time",
-            "wasabeef/Blurry",
-            "google/dagger",
-            "square/okhttp",
-            "sqlcipher/android-database-sqlcipher",
-            "apache/commons-lang"
+            "agrosner/DBFlow"                     : null,
+            "openid/AppAuth-Android"              : null,
+            "swagger-api/swagger-codegen"         : { obj -> obj.title.contains("java") },
+            "JodaOrg/joda-time"                   : null,
+            "wasabeef/Blurry"                     : null,
+            "google/dagger"                       : null,
+            "square/okhttp"                       : null,
+            "sqlcipher/android-database-sqlcipher": null,
+            "apache/commons-lang"                 : null,
+            "ReactiveX/RxJava"                    : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } }
     ]
 
     static void main(String[] args) {
-        REPOS.each {
-            loadIssues it
+        REPOS.each { repo, filter ->
+            loadIssues repo, filter
         }
     }
 
-    private static def loadIssues(String repo) {
+    private static def loadIssues(String repo, Closure filter) {
         def fileName = repo.split("/")[1]
         def file = new File(FOLDER, "${fileName}.csv")
         file.parentFile.mkdirs()
@@ -37,10 +38,10 @@ class Main {
         file.createNewFile()
         file.append "$TITLE\n"
 
-        loadIssues file, repo
+        loadIssues file, repo, filter
     }
 
-    private static def loadIssues(File file, String repo, int page = 1) {
+    private static def loadIssues(File file, String repo, Closure filter, int page = 1) {
         println "$repo loading page:$page"
         def request = new URL("https://api.github.com/repos/$repo/issues?page=$page&per_page=100").openConnection() as HttpURLConnection
         if (USERNAME && PASSWORD) {
@@ -56,8 +57,8 @@ class Main {
         if (responseCode == 200) {
             def link = request.headerFields.Link ?: request.headerFields.link
             def hasNextPage = link?.get(0)?.contains("rel=\"next\"") ?: false
-            parseAndAppendToFile file, request.inputStream.text
-            if (hasNextPage) loadIssues file, repo, ++page
+            parseAndAppendToFile file, request.inputStream.text, filter
+            if (hasNextPage) loadIssues file, repo, filter, ++page
             success = true
             println "Success"
         } else {
@@ -67,11 +68,12 @@ class Main {
         return success
     }
 
-    private static def parseAndAppendToFile(File file, String jsonText) {
+    private static def parseAndAppendToFile(File file, String jsonText, Closure filter) {
         def parser = new JsonSlurper()
         def json = parser.parseText jsonText
         json.each {
             if (it.pull_request != null) return // Ignore Pull Requests
+            if (filter && !filter.call(it)) return // Filter issues
             def line = "," + wrap("=HYPERLINK(\"${it.html_url}\";\"${it.title}\")") +
                     "," + wrap(it.number) +
                     "," + wrap(it.created_at) +
