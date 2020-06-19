@@ -1,0 +1,15 @@
+plugins {
+    id 'groovy'
+    id 'java'
+}
+
+group 'com.medtronic'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.codehaus.groovy:groovy-all:2.5.12'
+}
