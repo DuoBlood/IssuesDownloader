@@ -12,16 +12,24 @@ class Main {
     private static def TITLE = "Reviews note,Title,Number,Created at,Reporter"
 
     private static def REPOS = [
-            "agrosner/DBFlow"                     : null,
-            "openid/AppAuth-Android"              : null,
-            "swagger-api/swagger-codegen"         : { obj -> obj.title.contains("java") },
-            "JodaOrg/joda-time"                   : null,
-            "wasabeef/Blurry"                     : null,
-            "google/dagger"                       : null,
-            "square/okhttp"                       : null,
-            "sqlcipher/android-database-sqlcipher": null,
-            "apache/commons-lang"                 : null,
-            "ReactiveX/RxJava"                    : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } }
+//            "PhilJay/MPAndroidChart"                         : null,
+//            "openid/AppAuth-Android"                         : null,
+//            "CAAPIM/Android-MAS-SDK"                         : null,
+//            "material-components/material-components-android": null,
+//            "scottyab/rootbeer"                              : null,
+//            "agrosner/DBFlow"                                : null,
+//            "google/gson"                                    : null,
+//            "openid/AppAuth-Android"                         : null,
+//            "swagger-api/swagger-codegen"                    : { obj -> obj.title.contains("java") },
+//            "JodaOrg/joda-time"                              : null,
+//            "mmin18/RealtimeBlurView"                        : null,
+//            "wasabeef/Blurry"                                : null,
+//            "google/dagger"                                  : null,
+//            "Adobe-Marketing-Cloud/mobile-services"          : null,
+//            "square/okhttp"                                  : null,
+//            "sqlcipher/android-database-sqlcipher"           : null,
+//            "apache/commons-lang"                            : null,
+//            "ReactiveX/RxJava"                               : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } }
     ]
 
     static void main(String[] args) {
@@ -32,11 +40,11 @@ class Main {
 
     private static def loadIssues(String repo, Closure filter) {
         def fileName = repo.split("/")[1]
-        def file = new File(FOLDER, "${fileName}.csv")
+        def file = new File(FOLDER, "${fileName}.txt")
         file.parentFile.mkdirs()
         file.delete();
         file.createNewFile()
-        file.append "$TITLE\n"
+//        file.append "$TITLE\n"
 
         loadIssues file, repo, filter
     }
@@ -74,11 +82,19 @@ class Main {
         json.each {
             if (it.pull_request != null) return // Ignore Pull Requests
             if (filter && !filter.call(it)) return // Filter issues
-            def line = "," + wrap("=HYPERLINK(\"${it.html_url}\";\"${it.title}\")") +
-                    "," + wrap(it.number) +
-                    "," + wrap(it.created_at) +
-                    "," + wrap(it.user.login)
-            file.append "$line\n"
+            if (it.labels.size == 0 || it.labels.stream().anyMatch { it.name == "bug" }) {
+                def line = "$it.title" +
+                        "\t$it.html_url" +
+                        "\t$it.number" +
+                        "\t$it.created_at" +
+                        "\t$it.user.login"
+
+//                def line = "," + wrap("=HYPERLINK(\"${it.html_url}\";\"${it.title}\")") +
+//                        "," + wrap(it.number) +
+//                        "," + wrap(it.created_at) +
+//                        "," + wrap(it.user.login)
+                file.append "$line\n"
+            }
 
         }
     }
