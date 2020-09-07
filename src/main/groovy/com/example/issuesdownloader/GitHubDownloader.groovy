@@ -11,24 +11,21 @@ class GitHubDownloader {
     private static def TITLE = "Reviews note,Title,Number,Created at,Reporter"
 
     private static def REPOS = [
-//            "PhilJay/MPAndroidChart"                         : null,
-//            "openid/AppAuth-Android"                         : null,
-//            "CAAPIM/Android-MAS-SDK"                         : null,
-//            "material-components/material-components-android": null,
-//            "scottyab/rootbeer"                              : null,
-//            "agrosner/DBFlow"                                : null,
-//            "google/gson"                                    : null,
-//            "openid/AppAuth-Android"                         : null,
-//            "swagger-api/swagger-codegen"                    : { obj -> obj.title.contains("java") },
-//            "JodaOrg/joda-time"                              : null,
-//            "mmin18/RealtimeBlurView"                        : null,
-//            "wasabeef/Blurry"                                : null,
-            "google/dagger"                                  : null,
-//            "Adobe-Marketing-Cloud/mobile-services"          : null,
-//            "square/okhttp"                                  : null,
-//            "sqlcipher/android-database-sqlcipher"           : null,
-//            "apache/commons-lang"                            : null,
-//            "ReactiveX/RxJava"                               : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } }
+            "tony19/logback-android"               : null,
+            "openid/AppAuth-Android"               : null,
+            "CAAPIM/Android-MAS-SDK"               : null,
+            "scottyab/rootbeer"                    : null,
+            "agrosner/DBFlow"                      : null,
+            "google/gson"                          : null,
+            "swagger-api/swagger-codegen"          : { obj -> obj.title.contains("java") },
+            "JodaOrg/joda-time"                    : null,
+            "mmin18/RealtimeBlurView"              : null,
+            "wasabeef/Blurry"                      : null,
+            "google/dagger"                        : null,
+            "Adobe-Marketing-Cloud/mobile-services": null,
+            "square/okhttp"                        : null,
+            "sqlcipher/android-database-sqlcipher" : null,
+            "ReactiveX/RxJava"                     : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } }
     ]
 
     def run(String folder) {

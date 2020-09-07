@@ -5,8 +5,9 @@ import groovy.json.JsonSlurper
 class JiraDownloader {
 
     private static def REPOS = [
-            ["https://issues.apache.org/jira", "LANG", null],
-            ["https://issues.apache.org/jira", "IO", null]
+//            ["https://issues.apache.org/jira", "LANG", null],
+//            ["https://issues.apache.org/jira", "IO", null],
+            ["https://jira.qos.ch", "SLF4J", null]
     ]
 
 
