@@ -11,21 +11,23 @@ class GitHubDownloader {
     private static def TITLE = "Reviews note,Title,Number,Created at,Reporter"
 
     private static def REPOS = [
+            "sqlcipher/android-database-sqlcipher" : null,
             "tony19/logback-android"               : null,
-            "openid/AppAuth-Android"               : null,
-            "CAAPIM/Android-MAS-SDK"               : null,
-            "scottyab/rootbeer"                    : null,
-            "agrosner/DBFlow"                      : null,
             "google/gson"                          : null,
-            "swagger-api/swagger-codegen"          : { obj -> obj.title.contains("java") },
-            "JodaOrg/joda-time"                    : null,
+            "square/okhttp"                        : null,
+            "google/dagger"                        : null,
+            "JakeWharton/RxRelay"                  : null,
+            "ReactiveX/RxAndroid"                  : null,
+            "ReactiveX/RxJava"                     : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } },
             "mmin18/RealtimeBlurView"              : null,
             "wasabeef/Blurry"                      : null,
-            "google/dagger"                        : null,
+            "agrosner/DBFlow"                      : null,
+            "JodaOrg/joda-time"                    : null,
+            "swagger-api/swagger-codegen"          : { obj -> obj.title.contains("java") },
             "Adobe-Marketing-Cloud/mobile-services": null,
-            "square/okhttp"                        : null,
-            "sqlcipher/android-database-sqlcipher" : null,
-            "ReactiveX/RxJava"                     : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } }
+            "CAAPIM/Android-MAS-SDK"               : null,
+            "openid/AppAuth-Android"               : null,
+            "scottyab/rootbeer"                    : null
     ]
 
     def run(String folder) {

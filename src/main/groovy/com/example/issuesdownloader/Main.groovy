@@ -5,14 +5,14 @@ class Main {
     private static def FOLDER = "build/generated/issues"
 
     static void main(String[] args) {
-//        def git = new GitHubDownloader()
-//        git.run(FOLDER)
+        def git = new GitHubDownloader()
+        git.run(FOLDER)
 
-//        def jira = new JiraDownloader()
-//        jira.run(FOLDER)
+        def jira = new JiraDownloader()
+        jira.run(FOLDER)
 
-        def diff = new Diff()
+//        def diff = new Diff()
 //        diff.generateDiffs(FOLDER)
-        diff.mergeIssues(FOLDER)
+//        diff.mergeIssues(FOLDER)
     }
 }
