@@ -11,23 +11,25 @@ class GitHubDownloader {
     private static def TITLE = "Reviews note,Title,Number,Created at,Reporter"
 
     private static def REPOS = [
-            "sqlcipher/android-database-sqlcipher" : null,
-            "tony19/logback-android"               : null,
-            "google/gson"                          : null,
-            "square/okhttp"                        : null,
-            "google/dagger"                        : null,
-            "JakeWharton/RxRelay"                  : null,
-            "ReactiveX/RxAndroid"                  : null,
-            "ReactiveX/RxJava"                     : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } },
-            "mmin18/RealtimeBlurView"              : null,
-            "wasabeef/Blurry"                      : null,
-            "agrosner/DBFlow"                      : null,
-            "JodaOrg/joda-time"                    : null,
-            "swagger-api/swagger-codegen"          : { obj -> obj.title.contains("java") },
-            "Adobe-Marketing-Cloud/mobile-services": null,
-            "CAAPIM/Android-MAS-SDK"               : null,
-            "openid/AppAuth-Android"               : null,
-            "scottyab/rootbeer"                    : null
+            "sqlcipher/android-database-sqlcipher"           : null,
+            "tony19/logback-android"                         : null,
+            "google/gson"                                    : null,
+            "square/okhttp"                                  : null,
+            "google/dagger"                                  : null,
+            "JakeWharton/RxRelay"                            : null,
+            "ReactiveX/RxAndroid"                            : null,
+            "ReactiveX/RxJava"                               : { obj -> obj.title.contains("2.x") || obj.labels.stream().anyMatch { it.name == "2.x" } },
+//            "mmin18/RealtimeBlurView"                        : null,
+//            "wasabeef/Blurry"                                : null,
+//            "agrosner/DBFlow"                                : null,
+//            "JodaOrg/joda-time"                              : null,
+//            "swagger-api/swagger-codegen"                    : { obj -> obj.title.contains("java") },
+//            "Adobe-Marketing-Cloud/mobile-services"          : null,
+            "CAAPIM/Android-MAS-SDK"                         : null,
+            "openid/AppAuth-Android"                         : null,
+            "scottyab/rootbeer"                              : null,
+            "material-components/material-components-android": null,
+            "firebase/firebase-android-sdk": { obj -> obj.labels.stream().anyMatch { it.name == "api: analytics" } },
     ]
 
     def run(String folder) {
@@ -79,8 +81,10 @@ class GitHubDownloader {
         def json = parser.parseText jsonText
         json.each {
             if (it.pull_request != null) return // Ignore Pull Requests
-            if (filter && !filter.call(it)) return // Filter issues
-            if (it.labels.size == 0 || it.labels.stream().anyMatch { it.name == "bug" }) {
+            if (it.labels.size == 0
+                    || it.labels.stream().anyMatch { it.name == "bug" }
+                    || (filter && filter.call(it)) // Filter issues
+            ) {
                 def line = "$it.title" +
                         "\t$it.html_url" +
                         "\t$it.number" +
